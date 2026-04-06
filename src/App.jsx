@@ -38,6 +38,9 @@ const App = () => {
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [letterRevealed, setLetterRevealed] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const audioRef = useRef(null);
   
   const searchParams = new URLSearchParams(window.location.search);
@@ -56,10 +59,21 @@ const App = () => {
   }, [showContent]);
 
   const handleStart = () => {
-    setShowContent(true);
-    setIsPlaying(true);
-    if (audioRef.current) {
-      audioRef.current.play().catch(e => console.log("Audio play blocked", e));
+    setShowPassword(true);
+  };
+
+  const verifyPassword = () => {
+    if (password === 'Racchu') {
+      setShowContent(true);
+      setIsPlaying(true);
+      setShowPassword(false);
+      setError('');
+      if (audioRef.current) {
+        audioRef.current.play().catch(e => console.log("Audio play blocked", e));
+      }
+    } else {
+      setError('Incorrect Password. Hint: It\'s your name 🤫');
+      setPassword('');
     }
   };
 
@@ -87,6 +101,9 @@ const App = () => {
     setEnvelopeOpen(false);
     setLetterRevealed(false);
     setShowContent(false);
+    setShowPassword(false);
+    setPassword('');
+    setError('');
     setIsPlaying(false);
     if (audioRef.current) {
       audioRef.current.pause();
@@ -153,6 +170,33 @@ const App = () => {
               <Music className="group-hover:rotate-12 transition-transform" />
               <span className="font-bold tracking-wider">ENTER THE SURPRISE 🔑</span>
             </motion.button>
+
+            <AnimatePresence>
+              {showPassword && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="mt-8 glass-card p-8 rounded-3xl border border-royal-gold/30 max-w-sm mx-auto"
+                >
+                  <h3 className="gold-text text-xl mb-4 font-serif">Enter Password</h3>
+                  <input 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Hint: It's You..."
+                    className="w-full bg-white/5 border border-royal-gold/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-royal-gold mb-4 text-center tracking-widest"
+                  />
+                  {error && <p className="text-red-400 text-sm mb-4 animate-shake">{error}</p>}
+                  <button 
+                    onClick={verifyPassword}
+                    className="w-full py-3 rounded-xl bg-royal-gold text-midnight font-bold hover:brightness-110 transition-all"
+                  >
+                    UNLOCK MAGIC
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         ) : (
           <motion.div
@@ -244,7 +288,12 @@ Happy Birthday! 💖🎂✨👫"
                             animate={{ 
                               y: 0, 
                               opacity: letterRevealed ? 0 : 1, 
-                              scale: letterRevealed ? 0.8 : 1 
+                              scale: letterRevealed ? 0.8 : 1,
+                              rotate: !envelopeOpen ? [0, -1, 1, -1, 0] : 0
+                            }}
+                            transition={{ 
+                              y: { duration: 0.8 },
+                              rotate: { repeat: Infinity, duration: 2, ease: "easeInOut" }
                             }}
                             className="envelope-layer envelope-back h-full w-full"
                           ></motion.div>
@@ -286,7 +335,12 @@ Happy Birthday! 💖🎂✨👫"
                             animate={{ 
                               y: 0, 
                               opacity: letterRevealed ? 0 : 1, 
-                              scale: letterRevealed ? 0.8 : 1 
+                              scale: letterRevealed ? 0.8 : 1,
+                              rotate: !envelopeOpen ? [0, -1, 1, -1, 0] : 0
+                            }}
+                            transition={{ 
+                              y: { duration: 0.8 },
+                              rotate: { repeat: Infinity, duration: 2, ease: "easeInOut" }
                             }}
                             className="envelope-layer envelope-front h-full w-full"
                           ></motion.div>
