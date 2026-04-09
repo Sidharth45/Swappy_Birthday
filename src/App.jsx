@@ -45,7 +45,7 @@ const App = () => {
   
   const searchParams = new URLSearchParams(window.location.search);
   const name = searchParams.get('name') || "Pooojaa";
-  const message = searchParams.get('message') || "To my dearest friend,\nLife feels so much brighter with you in it. Thank you for always standing by me and for making every moment so special.\nYou mean more to me than I can ever truly express.\nI hope this year brings you all the joy, love, and happiness you deserve, and fills your life with beautiful memories.\nHappy Birthday! 🎂✨💖";
+  const message = searchParams.get('message') || "To my dearest friend,\nYour kindness, support, and presence make life so much better. I’m really grateful to have friend like you in my life.\nYou mean more to me than I can ever truly express.\nI hope this year brings you all the joy, love, and happiness you deserve, and fills your life with beautiful memories.\nHappy Birthday! 🎂✨💖";
 
   useEffect(() => {
     if (showContent) {
